@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Control.MessageBus.RabbitMq</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="packages\**" />
+    <Compile Remove="paket-files\**" />
+    <EmbeddedResource Remove="packages\**" />
+    <EmbeddedResource Remove="paket-files\**" />
+    <None Remove="packages\**" />
+    <None Remove="paket-files\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="paket.dependencies" />
+    <None Remove="paket.lock" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="RabbitMQ.Client" Version="5.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MessageBus\MessageBus.csproj" />
+  </ItemGroup>
+
+</Project>
