@@ -44,8 +44,11 @@ namespace Consumer
             void OnCompleted() =>
                 Log("Subscription Disposed.");
 
-            void Log(string message) =>
+            void Log(string message)
+            {
+                System.Threading.Thread.Sleep(1000);
                 Console.WriteLine($"[{DateTimeOffset.Now}]   {message}");
+            }
         }
     }
 }
