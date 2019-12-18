@@ -9,14 +9,20 @@ namespace Send
     {
         public string Value { get; set; }
     }
+
     internal static class Program
     {
         public static void Main(string[] args)
         {
             var queueName = "strings_queue";
             Log("Application started. Connecting to RabbitMq...");
-
-            using var connection = ConnectToRabbitMq("localhost");
+                var factory = new ConnectionFactory() 
+                { 
+                    HostName = "localhost",
+                    UserName = "alejandro",
+                    Password = "teslamotors"
+                };
+            using var connection = factory.CreateConnection();
             using var channel = connection.CreateModel();
 
             Console.WriteLine("Enter the words to send separated by spaces.");
@@ -28,9 +34,7 @@ namespace Send
             {
                 Log($"Sending message '{word}'...");
                 var message = new Message<string>(Guid.NewGuid(), word);
-                var messageOfOtherType = new Message<OtherType>(Guid.NewGuid(), new OtherType { Value = word });
                 producer.PostAsync(message);
-                producer.PostAsync(messageOfOtherType);
                 Log("Message sent.");
             }
 
@@ -38,19 +42,6 @@ namespace Send
 
             channel.Close();
             connection.Close();
-
-            IConnection ConnectToRabbitMq(string hostName)
-            {
-                try
-                {
-                    var factory = new ConnectionFactory() { HostName = "localhost" };
-                    return factory.CreateConnection();
-                }
-                finally
-                {
-                    Log("rabbitmq connection created");
-                }
-            }
 
             string[] GetMessages(string messageInput) =>
                 (messageInput.Length > 0) ? messageInput.Split(' ') : new string[] { "Hello.", "Goodbye." };

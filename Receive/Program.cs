@@ -15,7 +15,12 @@ namespace Receive
             Log("started");
             var queueName = "strings_queue";
 
-            var factory = new ConnectionFactory() { HostName = "localhost" };
+            var factory = new ConnectionFactory() 
+            { 
+                HostName = "localhost",
+                UserName = "alejandro",
+                Password = "teslamotors"
+            };
             using var connection = factory.CreateConnection();
             Log("rabbitmq connection created");
 
@@ -23,7 +28,7 @@ namespace Receive
             Log("channel created");
 
             var listener = new MessageBusConsumerListener<string>(channel, queueName);
-
+            
             Log("listener created");
 
             var subscription = listener.Subscribe(OnNext, OnError, OnCompleted);
@@ -47,7 +52,6 @@ namespace Receive
             void Log(string message) => 
                 Console.WriteLine($"[{DateTimeOffset.Now}]  {message}");
         }
-
 
         private static void DoStuff(string message)
         {
