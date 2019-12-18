@@ -1,4 +1,4 @@
-﻿namespace Consumer_Producer
+﻿namespace Producer
 {
     partial class Form1
     {
@@ -43,7 +43,7 @@
             this.Download.UseVisualStyleBackColor = true;
             this.Download.Click += new System.EventHandler(this.Download_Click);
             // 
-            // Consumer_Producer
+            // Producer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -53,8 +53,8 @@
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.Black;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "Consumer_Producer";
-            this.Text = "Form1";
+            this.Name = "Producer";
+            this.Text = "Producer";
             this.ResumeLayout(false);
         }
 

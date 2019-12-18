@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Consumer_Producer
+namespace Producer
 {
     public partial class Form1 : Form
     {
@@ -24,7 +24,7 @@ namespace Consumer_Producer
 
         private void Download_Click(object sender, EventArgs e)
         {
-            string queueName = "Download";
+            const string queueName = "Download";
             string sendingMessage = $"[{DateTimeOffset.Now}]   Hey I want you to download this.";
 
             ConnectionFactory factory = new ConnectionFactory()
