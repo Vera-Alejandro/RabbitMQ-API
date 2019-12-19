@@ -33,9 +33,25 @@ namespace Producer
 
             Message<string> message  = new Message<string>(Guid.NewGuid(), sendingMessage);
 
-            producer.PostAsync(message);
-            Debug.WriteLine("Message Sent");
+            int.TryParse(Download1Count.Text, out int count);
+            this.Enabled = false;
 
+            
+            if (count > 0)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    producer.PostAsync(message);
+                    Debug.WriteLine("Message Sent");
+                }
+            }
+            else
+            {
+                producer.PostAsync(message);
+                Debug.WriteLine("Message Sent");
+            }
+
+            this.Enabled = true;
             channel.Close();
             connection.Close();
         }
@@ -59,10 +75,27 @@ namespace Producer
 
             Message<string> message = new Message<string>(Guid.NewGuid(), sendingMessage);
 
-            producer.PostAsync(message);
+            int.TryParse(Download1Count.Text, out int count);
+
+            this.Enabled = false;
+
+            if (count > 0)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    producer.PostAsync(message);
+                    Debug.WriteLine("Message Sent");
+                }
+            } 
+            else
+            {
+                producer.PostAsync(message);
+                Debug.WriteLine("Message Sent");
+            }
 
             Debug.WriteLine($"Message sent at {DateTimeOffset.Now}");
 
+            this.Enabled = true;
             channel.Close();
             connection.Close();
         }

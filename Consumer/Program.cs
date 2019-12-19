@@ -9,8 +9,7 @@ namespace Consumer
 	{
 		static void Main(string[] args)
 		{
-			const string queueName = "Download";
-			const string exchangeName = "Batching1";
+			const string queueName = "Download_Batching_1";
 			ConnectionFactory factory = new ConnectionFactory()
 			{
 				HostName = "localhost",
@@ -19,7 +18,7 @@ namespace Consumer
 			};
 
 			using var connection = factory.CreateConnection();
-			Log("connection created.");
+			Log("connection created. -- Batching 1.");
 
 			using var channel = connection.CreateModel();
 
