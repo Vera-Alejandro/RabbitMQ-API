@@ -17,7 +17,8 @@ namespace Producer
         private void Batching1_Click(object sender, EventArgs e)
         {
             const string queueName = "Download_Batching_1";
-            string sendingMessage = $"[{DateTimeOffset.Now}]   Hey I want you to download this.";
+            Random rand = new Random();
+            int sendingMessage;
 
             ConnectionFactory factory = new ConnectionFactory()
             {
@@ -31,27 +32,26 @@ namespace Producer
 
             MessageBusProducerClient producer = new MessageBusProducerClient(channel, queueName);
 
-            Message<string> message  = new Message<string>(Guid.NewGuid(), sendingMessage);
-
             int.TryParse(Download1Count.Text, out int count);
-            this.Enabled = false;
-
             
             if (count > 0)
             {
                 for (int i = 0; i < count; i++)
                 {
+                    sendingMessage = rand.Next(1, 30);
+                    Message<int> message  = new Message<int>(Guid.NewGuid(), sendingMessage);
                     producer.PostAsync(message);
                     Debug.WriteLine("Message Sent");
                 }
             }
             else
             {
+                sendingMessage = rand.Next(1, 30);
+                Message<int> message = new Message<int>(Guid.NewGuid(), sendingMessage);
                 producer.PostAsync(message);
                 Debug.WriteLine("Message Sent");
             }
 
-            this.Enabled = true;
             channel.Close();
             connection.Close();
         }
@@ -59,7 +59,8 @@ namespace Producer
         private void Batching2_Click(object sender, EventArgs e)
         {
             string queueName = "Download_Batching_2";
-            string sendingMessage = $"[{DateTimeOffset.Now}]   Download this yo.";
+            Random rand = new Random();
+            int sendingMessage = rand.Next(1, 30);
 
             ConnectionFactory factory = new ConnectionFactory()
             { 
@@ -73,29 +74,26 @@ namespace Producer
 
             MessageBusProducerClient producer = new MessageBusProducerClient(channel, queueName);
 
-            Message<string> message = new Message<string>(Guid.NewGuid(), sendingMessage);
-
             int.TryParse(Download1Count.Text, out int count);
-
-            this.Enabled = false;
 
             if (count > 0)
             {
                 for (int i = 0; i < count; i++)
                 {
+                    Message<int> message = new Message<int>(Guid.NewGuid(), sendingMessage);
                     producer.PostAsync(message);
                     Debug.WriteLine("Message Sent");
                 }
             } 
             else
             {
+                Message<int> message = new Message<int>(Guid.NewGuid(), sendingMessage);
                 producer.PostAsync(message);
                 Debug.WriteLine("Message Sent");
             }
 
             Debug.WriteLine($"Message sent at {DateTimeOffset.Now}");
 
-            this.Enabled = true;
             channel.Close();
             connection.Close();
         }
