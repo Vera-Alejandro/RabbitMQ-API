@@ -78,7 +78,7 @@ namespace Interstates.Control.MessageBus.RabbitMq.Implementation
 
         private IDisposable CreateSubscription(IObserver<Message<TPayload>> observer)
         {
-            var headers = CreateHeaders<TPayload>();
+            //var headers = CreateHeaders();
 
             _channel.ExchangeDeclare(
                 _exchangeName,
@@ -87,8 +87,8 @@ namespace Interstates.Control.MessageBus.RabbitMq.Implementation
             _channel.QueueBind(
                 queueName,
                 _exchangeName,
-                String.Empty,
-                headers);
+                String.Empty);
+                //CreateHeaders());
 
             var consumer = new EventingBasicConsumer(_channel); // TODO: inject?
             consumer.Received += OnNext;
@@ -104,7 +104,7 @@ namespace Interstates.Control.MessageBus.RabbitMq.Implementation
                     var message = new Message<TPayload>(
                         dto.Id,
                         dto.CorrelationId,
-                        _serializer.Deserialize<TPayload>(dto.Body),
+                        _serializer.Deserialize<TPayload>(dto.Body), // TODO: what if we want to listen to more than 1 type of message?
                         dto.QueuedAt,
                         _timeProvider.Now);
 
@@ -125,11 +125,11 @@ namespace Interstates.Control.MessageBus.RabbitMq.Implementation
             }
         }
 
-        private static IDictionary<string, object> CreateHeaders<TPayload>()
+        private static IDictionary<string, object> CreateHeaders()
         {
             var properties = new Dictionary<string, object>();
-            properties.Add("x-match", "all");
-            properties.Add("Type", typeof(TPayload).Name);
+            properties.Add("x-match", "any");
+            properties.Add("x-type", typeof(TPayload).Name);
             return properties;
         }
     }

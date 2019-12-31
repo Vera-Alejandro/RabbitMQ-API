@@ -44,7 +44,7 @@ namespace Interstates.Control.MessageBus.RabbitMq.Implementation
         public Task PostAsync<TPayload>(Message<TPayload> message)
         {
             var properties = _channel.CreateBasicProperties();
-            properties.Headers = CreateHeaders<TPayload>();
+            //properties.Headers = CreateHeaders<TPayload>();
             properties.Persistent = true;
 
             _channel.ExchangeDeclare(_exchangeName, ExchangeType.Headers);
@@ -75,9 +75,12 @@ namespace Interstates.Control.MessageBus.RabbitMq.Implementation
         private static IDictionary<string, object> CreateHeaders<TPayload>()
         {
             var properties = new Dictionary<string, object>();
-            properties.Add("x-match", "all");
-            properties.Add("Type", typeof(TPayload).Name);
+            properties.Add("x-match", "any");
+            properties.Add("x-type", typeof(TPayload).Name);
             return properties;
+
+
+
             //var type = typeof(TPayload);
             //var properties = PropertyInformationCache.GetOrAdd(type, GetProperties).Value;
             //return properties.ToDictionary(prop => prop.Name, prop => prop.GetValue(body, null));
