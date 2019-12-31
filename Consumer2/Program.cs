@@ -22,7 +22,7 @@ namespace Consumer2
             using var channel = connection.CreateModel();
             Log("connection created -- Batching 2.");
 
-            MessageBusConsumerListener<string> listener = new MessageBusConsumerListener<string>(channel, queueName);
+            MessageBusConsumerListener<int> listener = new MessageBusConsumerListener<int>(channel, queueName);
 
             var subscription = listener.Subscribe(OnNext, OnError, OnCompleted);
 
@@ -34,15 +34,17 @@ namespace Consumer2
 
             //Submethods
 
-            void OnNext(Message<string> message) =>
-                Log($"Received {message.Body} at {message.DeliveredAt}.");
+            void OnNext(Message<int> message)
+            {
+                Log($"Sleep for {message.Body} sec :: delivered at {message.DeliveredAt}.");
+                System.Threading.Thread.Sleep(message.Body * 1000);
+            }
             void OnError(Exception ex) =>
                 Log($"Error occured on delivery.{ex.Message}");
             void OnCompleted() =>
                 Log("Subscription Disposed.");
             void Log(string message)
             {
-                System.Threading.Thread.Sleep(1000);
                 Console.WriteLine($"[{DateTimeOffset.Now}] :: {message}");
             }
 
