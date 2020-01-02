@@ -2,6 +2,7 @@
 using Interstates.Control.MessageBus.RabbitMq.Implementation;
 using RabbitMQ.Client;
 using System;
+using System.Threading;
 
 namespace Consumer
 {
@@ -22,7 +23,7 @@ namespace Consumer
 
 			using var channel = connection.CreateModel();
 
-			var listener = new MessageBusConsumerListener<string>(channel, queueName);
+			MessageBusConsumerListener<int> listener = new MessageBusConsumerListener<int>(channel, queueName);
 
 			var subscription = listener.Subscribe(OnNext, OnError, OnCompleted);
 
@@ -35,8 +36,11 @@ namespace Consumer
 
 			//SubMethods
 
-			void OnNext(Message<string> message) =>
-				Log($"Received '{message.Body}' (at {message.DeliveredAt}).");
+			void OnNext(Message<int> message)
+			{
+				Log($"Sleep for {message.Body} sec :: delivered at {message.DeliveredAt}.");
+				Thread.Sleep(message.Body * 1000);
+			}
 
 			void OnError(Exception ex) =>
 				Log($"An error occured while handeling a message from the queue. {ex.Message}.");
@@ -46,7 +50,6 @@ namespace Consumer
 
 			void Log(string message)
 			{
-				System.Threading.Thread.Sleep(1000);
 				Console.WriteLine($"[{DateTimeOffset.Now}]   {message}");
 			}
 		}

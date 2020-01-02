@@ -48,7 +48,7 @@ namespace Interstates.Control.MessageBus.RabbitMq.Implementation
             properties.Persistent = true;
 
             _channel.ExchangeDeclare(_exchangeName, ExchangeType.Headers);
-
+            
             var dto = new MessageDto
             {
                 Id = message.Id,
